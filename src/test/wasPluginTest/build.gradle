@@ -1,0 +1,28 @@
+buildscript {
+	repositories {
+		flatDir {
+			dirs "libraries"
+		}
+	}
+
+	dependencies {
+
+		classpath name: 'was'
+	}
+}
+
+apply plugin: 'wasPlugin'
+
+// TODO set classpath value from %wasHome%/%profileName%/plugins/com.ibm.ws.runtime.jars
+// dependencies {
+//     was name: 'com.ibm.ws.runtime'
+// }
+
+
+was {
+	wasHome = "${System.getenv('WAS_HOME')}"
+
+	wasProfile {
+		profileName = 'AppServ01'
+	}
+}
