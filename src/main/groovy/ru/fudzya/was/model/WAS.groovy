@@ -4,13 +4,26 @@ import org.gradle.util.Configurable
 import org.gradle.util.ConfigureUtil
 
 /**
+ * todo javadoc
+ *
  * @author fudzya
  * @since 22.10.2016
  */
 class WAS implements Configurable<WAS>
 {
+	/**
+	 *
+	 */
 	String wasHome
+
+	/**
+	 *
+	 */
 	String user
+
+	/**
+	 *
+	 */
 	String password
 
 	private WASProfile wasProfile

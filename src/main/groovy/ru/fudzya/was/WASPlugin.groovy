@@ -3,15 +3,12 @@ package ru.fudzya.was
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.ProjectConfigurationException
-import org.gradle.api.internal.NullNamingPropertyException
-import org.gradle.internal.impldep.com.fasterxml.jackson.databind.exc.IgnoredPropertyException
-import org.gradle.internal.impldep.org.apache.maven.plugin.PluginConfigurationException
-import org.gradle.internal.typeconversion.TypeConversionException
 import ru.fudzya.was.model.WAS
 import ru.fudzya.was.task.WASAdminTask
 import ru.fudzya.was.task.WASListApplicationsTask
+import ru.fudzya.was.task.WASServerTask
 import ru.fudzya.was.task.WASStartServerTask
+import ru.fudzya.was.task.WASTask
 
 /**
  * @author fudzya
@@ -21,7 +18,7 @@ class WASPlugin implements Plugin<Project>
 {
 	void apply(Project project)
 	{
-		project.getExtensions().create('was', WAS)
+		project.getExtensions().create(WASConstants.CONFIGURATION_WAS, WAS)
 
 		createTasks   (project)
 		createConfig  (project)
@@ -30,18 +27,18 @@ class WASPlugin implements Plugin<Project>
 
 	static def createConfig(Project project)
 	{
-		project.configurations.create('was')
+		project.configurations.create(WASConstants.CONFIGURATION_WAS)
 	}
 
 	static def createTasks(Project project)
 	{
-		project.tasks.create('wasApplications', WASListApplicationsTask)
-		project.tasks.create('wasStartServer',  WASStartServerTask)
+		project.tasks.create(WASConstants.TASK_LIST_APP,     WASListApplicationsTask)
+		project.tasks.create(WASConstants.TASK_START_SERVER, WASStartServerTask)
 	}
 
 	static def configureTasks(Project project)
 	{
-		project.getTasks().withType(WASAdminTask) { WASAdminTask task ->
+		project.getTasks().withType(WASTask) { WASTask task ->
 
 			final WAS was = project.getExtensions().findByType(WAS)
 
@@ -50,6 +47,7 @@ class WASPlugin implements Plugin<Project>
 				def wasHome = was.getWasHome()
 				if (!wasHome)
 				{
+					project.getLogger().info('Попытка получить директорию установки WebSphere AS из переменной окружения WAS_HOME')
 					wasHome = System.getenv('WAS_HOME')
 				}
 
@@ -58,7 +56,8 @@ class WASPlugin implements Plugin<Project>
 					def file = new File(wasHome)
 					if (file && file.exists())
 					{
-						return file
+						project.getLogger().info('WebSphere AS установлена в директорию {}', file.path)
+						return wasHome
 					}
 
 					throw new GradleException("Директория $wasHome не существует")
@@ -67,6 +66,7 @@ class WASPlugin implements Plugin<Project>
 				throw new GradleException('Должна быть установлена переменная окружения WAS_HOME или свойство wasHome')
 			})
 
+			/*
 			task.getConventionMapping().map('user',
 			{
 				was.getUser()
@@ -96,6 +96,15 @@ class WASPlugin implements Plugin<Project>
 
 			task.getConventionMapping().map('failOnError', {
 			})
+			*/
+		}
+
+		project.getTasks().withType(WASServerTask) {
+
+		}
+
+		project.getTasks().withType(WASAdminTask) {
+
 		}
 	}
 }

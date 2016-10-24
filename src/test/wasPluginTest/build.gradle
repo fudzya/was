@@ -20,8 +20,6 @@ apply plugin: 'wasPlugin'
 
 
 was {
-	wasHome = "${System.getenv('WAS_HOME')}"
-
 	wasProfile {
 		profileName = 'AppServ01'
 	}

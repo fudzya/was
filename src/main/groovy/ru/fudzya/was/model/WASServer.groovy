@@ -4,14 +4,17 @@ import org.gradle.util.Configurable
 import org.gradle.util.ConfigureUtil
 
 /**
+ * todo javadoc
+ *
  * @author fudzya
- * @since 22.10.2016
+ * @since  22.10.2016
  */
 class WASServer implements Configurable<WASServer>
 {
-	String name
-	String userName
-	String password
+	/**
+	 *
+	 */
+	String serverName
 
 	WASServer configure(Closure closure)
 	{

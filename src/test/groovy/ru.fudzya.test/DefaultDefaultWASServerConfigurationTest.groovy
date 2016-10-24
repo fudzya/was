@@ -4,6 +4,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Before
 import org.junit.Test
+import ru.fudzya.was.WASConstants
 
 import static org.junit.Assert.*
 
@@ -37,7 +38,7 @@ class DefaultDefaultWASServerConfigurationTest
 		{
 			BuildResult buildResult = GradleRunner.create()
 												  .withProjectDir(testBuildDir)
-												  .withArguments('wasApplications', '--info')
+												  .withArguments(WASConstants.TASK_START_SERVER, '--stacktrace')
 												  .build()
 
 			println buildResult.output
