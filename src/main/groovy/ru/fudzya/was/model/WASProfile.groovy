@@ -4,42 +4,29 @@ import org.gradle.util.Configurable
 import org.gradle.util.ConfigureUtil
 
 /**
- * todo javadoc
- *
  * @author fudzya
  * @since 22.10.2016
  */
 class WASProfile implements Configurable<WASProfile>
 {
-	private WASServer wasServer
+	final WASServer wasServer = new WASServer()
 
 	/**
-	 *
+	 * Имя профиля WAS
 	 */
 	String profileName
 
 	/**
-	 *
-	 * @param closure
+	 * @param closure замыкание для настройки сервера
 	 */
 	void wasServer(Closure closure)
 	{
-		wasServer = ConfigureUtil.configure(closure, new WASServer())
+		ConfigureUtil.configure(closure, wasServer)
 	}
 
 	/**
-	 *
-	 * @return
-	 */
-	WASServer getWASServer()
-	{
-		wasServer
-	}
-
-	/**
-	 *
-	 * @param closure
-	 * @return
+	 * @param closure замыкание для настройки профиля
+	 * @return настроенный текущий экземпляр
 	 */
 	WASProfile configure(Closure closure)
 	{

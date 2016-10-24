@@ -9,19 +9,16 @@ import ru.fudzya.was.WASConstants
  */
 class WASListApplicationsTask extends WASAdminTask
 {
-	WASListApplicationsTask()
-	{
-		super()
-	}
-
 	@TaskAction
 	void doExecute()
 	{
-		getAnt().taskdef(name      : 'listApplications',
-						 classname : WASConstants.CLASS_LIST_APPS,
-						 classpath : this.getClasspath()) {
+		getAnt().taskdef(
+			name      : 'listApplications',
+			classname : WASConstants.CLASS_LIST_APPS,
+			classpath : this.getClasspath())
 
+		getAnt().listApplications(
 
-		}
+		)
 	}
 }

@@ -4,40 +4,58 @@ import org.gradle.util.Configurable
 import org.gradle.util.ConfigureUtil
 
 /**
- * todo javadoc
+ * Описание общих настроек для WAS
  *
  * @author fudzya
- * @since 22.10.2016
+ * @since  22.10.2016
  */
 class WAS implements Configurable<WAS>
 {
+	final WASProfile wasProfile = new WASProfile()
+
 	/**
-	 *
+	 * Путь до установленного WAS
 	 */
 	String wasHome
 
 	/**
-	 *
+	 * Имя пользователя
 	 */
 	String user
 
 	/**
-	 *
+	 * Пароль пользователя
 	 */
 	String password
 
-	private WASProfile wasProfile
+	/**
+	 * Хост WAS
+	 */
+	String host
 
+	/**
+	 * Порт подключения
+	 */
+	String port
+
+	/**
+	 * Тип соединения. По-умолчанию SOAP
+	 */
+	ConnType connType = ConnType.SOAP
+
+	/**
+	 * @param closure замыкание используещееся для настройки профиля WAS
+	 */
 	void wasProfile(Closure closure)
 	{
-		wasProfile = ConfigureUtil.configure(closure, new WASProfile())
+		ConfigureUtil.configure(closure, wasProfile)
 	}
 
-	WASProfile getWASProfile()
-	{
-		wasProfile
-	}
-
+	/**
+	 *
+	 * @param closure замыкание для настройки текущего объекта WAS
+	 * @return настроенный текущий экземпляр
+	 */
 	WAS configure(Closure closure)
 	{
 		ConfigureUtil.configureSelf(closure, this)

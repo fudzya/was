@@ -1,4 +1,4 @@
-package ru.fudzya.was.task
+package ru.fudzya.was.model
 
 /**
  * Тип подключения к серверу приложений

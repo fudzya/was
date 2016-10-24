@@ -9,6 +9,10 @@ import org.gradle.util.ConfigureUtil
  */
 class WASApplication implements Configurable<WASApplication>
 {
+	/**
+	 * @param closure замыкание для настройки приложения
+	 * @return настроенный текущий экземпляр
+	 */
 	WASApplication configure(Closure closure)
 	{
 		ConfigureUtil.configureSelf(closure, this)

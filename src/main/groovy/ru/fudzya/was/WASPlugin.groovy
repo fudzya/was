@@ -4,6 +4,8 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import ru.fudzya.was.model.WAS
+import ru.fudzya.was.model.WASOptions
+import ru.fudzya.was.model.WASServer
 import ru.fudzya.was.task.WASAdminTask
 import ru.fudzya.was.task.WASListApplicationsTask
 import ru.fudzya.was.task.WASServerTask
@@ -18,7 +20,7 @@ class WASPlugin implements Plugin<Project>
 {
 	void apply(Project project)
 	{
-		project.getExtensions().create(WASConstants.CONFIGURATION_WAS, WAS)
+		project.getExtensions().create(WASConstants.EXTENSION_WAS, WAS)
 
 		createTasks   (project)
 		createConfig  (project)
@@ -38,73 +40,112 @@ class WASPlugin implements Plugin<Project>
 
 	static def configureTasks(Project project)
 	{
-		project.getTasks().withType(WASTask) { WASTask task ->
+		project.getTasks().with {
 
-			final WAS was = project.getExtensions().findByType(WAS)
+			final WAS        wasSrv  = project.getExtensions().findByType(WAS)
+			final WASServer  server  = wasSrv.getWasProfile().getWasServer()
+			final WASOptions options = server.getWasOptions()
 
-			task.getConventionMapping().map('wasHome',
-			{
-				def wasHome = was.getWasHome()
-				if (!wasHome)
+			withType(WASTask) { WASTask task ->
+
+				task.getConventionMapping().map('wasHome',
 				{
-					project.getLogger().info('Попытка получить директорию установки WebSphere AS из переменной окружения WAS_HOME')
-					wasHome = System.getenv('WAS_HOME')
-				}
-
-				if (wasHome)
-				{
-					def file = new File(wasHome)
-					if (file && file.exists())
+					def wasHome = wasSrv.getWasHome()
+					if (!wasHome)
 					{
-						project.getLogger().info('WebSphere AS установлена в директорию {}', file.path)
-						return wasHome
+						project.getLogger().info('Попытка получить директорию установки WebSphere AS из переменной окружения WAS_HOME')
+						wasHome = System.getenv('WAS_HOME')
 					}
 
-					throw new GradleException("Директория $wasHome не существует")
-				}
+					if (wasHome)
+					{
+						def file = new File(wasHome)
+						if (file && file.exists())
+						{
+							project.getLogger().info('WebSphere AS установлена в директорию {}', file.path)
+							return wasHome
+						}
 
-				throw new GradleException('Должна быть установлена переменная окружения WAS_HOME или свойство wasHome')
-			})
+						throw new GradleException("Директория $wasHome не существует")
+					}
 
-			/*
-			task.getConventionMapping().map('user',
-			{
-				was.getUser()
-			})
+					throw new GradleException('Должна быть установлена переменная окружения WAS_HOME или свойство wasHome')
+				})
 
-			task.getConventionMapping().map('password',
-			{
-				was.getPassword()
-			})
+				task.getConventionMapping().map('username',
+				{
+					wasSrv.getUser()
+				})
 
-			task.getConventionMapping().map('profileName',
-			{
-				was.getWASProfile().getProfileName()
-			})
+				task.getConventionMapping().map('password',
+				{
+					wasSrv.getPassword()
+				})
 
-			task.getConventionMapping().map('host', {
-			})
+				task.getConventionMapping().map('profileName',
+				{
+					wasSrv.getWasProfile().getProfileName()
+				})
 
-			task.getConventionMapping().map('port', {
-			})
+				task.getConventionMapping().map('fileEncoding',
+				{
+					options.getFileEncoding()
+				})
+			}
 
-			task.getConventionMapping().map('connType', {
-			})
+			withType(WASServerTask) { WASServerTask task ->
 
-			task.getConventionMapping().map('fileEncoding', {
-			})
+				task.getConventionMapping().map('server', {
+					server.getServerName()
+				})
 
-			task.getConventionMapping().map('failOnError', {
-			})
-			*/
-		}
+				task.getConventionMapping().map('timeout', {
+					options.getTimeout()
+				})
 
-		project.getTasks().withType(WASServerTask) {
+				task.getConventionMapping().map('statusPort', {
+					options.getStatusPort()
+				})
 
-		}
+				task.getConventionMapping().map('logFile', {
+					options.getLogFile()
+				})
 
-		project.getTasks().withType(WASAdminTask) {
+				task.getConventionMapping().map('replaceLog', {
+					options.isReplaceLog()
+				})
 
+				task.getConventionMapping().map('noWait', {
+					options.isNoWait()
+				})
+
+				task.getConventionMapping().map('quiet', {
+					options.isQuiet()
+				})
+
+				task.getConventionMapping().map('trace', {
+					options.isTrace()
+				})
+
+				task.getConventionMapping().map('failOnError', {
+					options.isFailOnError()
+				})
+			}
+
+			withType(WASAdminTask) { WASAdminTask task ->
+
+				task.getConventionMapping().map('host', {
+					wasSrv.getHost()
+				})
+
+				task.getConventionMapping().map('port', {
+					wasSrv.getPort()
+				})
+
+				task.getConventionMapping().map('connType', {
+					wasSrv.getConnType()
+				})
+			}
 		}
 	}
 }

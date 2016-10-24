@@ -6,6 +6,7 @@ package ru.fudzya.was
  */
 class WASConstants
 {
+	static final String EXTENSION_WAS       = 'was'
 	static final String CONFIGURATION_WAS   = 'was'
 
 	static final String TASK_LIST_APP       = 'wasApplications'

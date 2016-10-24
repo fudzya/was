@@ -1,4 +1,4 @@
-package ru.fudzya.was.task
+package ru.fudzya.was.model
 
 /**
  * Указывает на каком языке написан исполняемый скрипт

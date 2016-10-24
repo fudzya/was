@@ -45,9 +45,4 @@ abstract class WASServerTask extends WASTask
 	 * Включить или выключить трассировку
 	 */
 	boolean trace
-
-	WASServerTask()
-	{
-		super()
-	}
 }

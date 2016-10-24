@@ -23,7 +23,7 @@ abstract class WASTask extends ConventionTask
 	String username
 
 	/**
-	 * Пароль ползователя
+	 * Пароль пользователя
 	 */
 	String password
 
@@ -35,17 +35,12 @@ abstract class WASTask extends ConventionTask
 	/**
 	 * Прервать выполнение задачи при ошибке
 	 */
-	boolean failOnError = false
+	boolean failOnError
 
 	/**
 	 * Устанавливает file.encoding для VM
 	 */
 	String fileEncoding
-
-	WASTask()
-	{
-		this.fileEncoding = 'UTF-8'
-	}
 
 	/**
 	 *  Вычисляет classpath для выполняемого таска следующим образом:
@@ -59,7 +54,7 @@ abstract class WASTask extends ConventionTask
 		def wasClasspath = new File("${getWasHome()}/plugins/com.ibm.ws.runtime.jar")
 		if (wasClasspath.exists())
 		{
-			logger.info('Найдена библиотека классов - {}', 'com.ibm.ws.runtime.jar')
+			logger.info('Библиотека {} найдена', 'com.ibm.ws.runtime.jar')
 
 			def cfgClasspath = getProject().getConfigurations().getByName(WASConstants.CONFIGURATION_WAS)?.asPath
 			if (cfgClasspath)

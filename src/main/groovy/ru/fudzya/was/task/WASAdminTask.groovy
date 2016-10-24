@@ -1,5 +1,8 @@
 package ru.fudzya.was.task
 
+import ru.fudzya.was.model.ConnType
+import ru.fudzya.was.model.Lang
+
 /**
  * Базовый класс описывающий административные инструменты командной строки
  *
@@ -47,10 +50,4 @@ abstract class WASAdminTask extends WASTask
 	 * Язык исполняемого скрипта
 	 */
 	Lang lang
-
-	WASAdminTask()
-	{
-		super()
-		this.connType = ConnType.SOAP
-	}
 }
