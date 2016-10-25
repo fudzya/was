@@ -55,6 +55,11 @@ class WASOptions implements Configurable<WASOptions>
 	boolean failOnError
 
 	/**
+	 * Скрипт исполняемый при запуске скрипта
+	 */
+	String startServerScript
+
+	/**
 	 * @param closure замыкание для настройки опций
 	 * @return настроенный текущий экземпляр
 	 */

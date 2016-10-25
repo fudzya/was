@@ -38,7 +38,7 @@ class DefaultDefaultWASServerConfigurationTest
 		{
 			BuildResult buildResult = GradleRunner.create()
 												  .withProjectDir(testBuildDir)
-												  .withArguments(WASConstants.TASK_START_SERVER, '--stacktrace')
+												  .withArguments(WASConstants.TASK_START_SERVER)
 												  .build()
 
 			println buildResult.output

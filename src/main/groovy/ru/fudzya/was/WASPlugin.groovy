@@ -5,11 +5,12 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import ru.fudzya.was.model.WAS
 import ru.fudzya.was.model.WASOptions
+import ru.fudzya.was.model.WASProfile
 import ru.fudzya.was.model.WASServer
 import ru.fudzya.was.task.WASAdminTask
-import ru.fudzya.was.task.WASListApplicationsTask
+import ru.fudzya.was.task.was.WASListApplicationsTask
 import ru.fudzya.was.task.WASServerTask
-import ru.fudzya.was.task.WASStartServerTask
+import ru.fudzya.was.task.was.WASStartServerTask
 import ru.fudzya.was.task.WASTask
 
 /**
@@ -43,14 +44,15 @@ class WASPlugin implements Plugin<Project>
 		project.getTasks().with {
 
 			final WAS        wasSrv  = project.getExtensions().findByType(WAS)
-			final WASServer  server  = wasSrv.getWasProfile().getWasServer()
+			final WASProfile profile = wasSrv.getWasProfile()
+			final WASServer  server  = profile.getWasServer()
 			final WASOptions options = server.getWasOptions()
 
 			withType(WASTask) { WASTask task ->
 
 				task.getConventionMapping().map('wasHome',
 				{
-					def wasHome = wasSrv.getWasHome()
+					String wasHome = wasSrv.getWasHome()
 					if (!wasHome)
 					{
 						project.getLogger().info('Попытка получить директорию установки WebSphere AS из переменной окружения WAS_HOME')
@@ -63,7 +65,7 @@ class WASPlugin implements Plugin<Project>
 						if (file && file.exists())
 						{
 							project.getLogger().info('WebSphere AS установлена в директорию {}', file.path)
-							return wasHome
+							return wasHome//.replaceAll("\\\\", '/')
 						}
 
 						throw new GradleException("Директория $wasHome не существует")
@@ -84,7 +86,7 @@ class WASPlugin implements Plugin<Project>
 
 				task.getConventionMapping().map('profileName',
 				{
-					wasSrv.getWasProfile().getProfileName()
+					profile.getProfileName()
 				})
 
 				task.getConventionMapping().map('fileEncoding',
@@ -97,6 +99,10 @@ class WASPlugin implements Plugin<Project>
 
 				task.getConventionMapping().map('server', {
 					server.getServerName()
+				})
+
+				task.getConventionMapping().map('script', {
+					options.getStartServerScript()
 				})
 
 				task.getConventionMapping().map('timeout', {

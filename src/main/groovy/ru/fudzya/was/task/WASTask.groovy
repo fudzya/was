@@ -51,19 +51,34 @@ abstract class WASTask extends ConventionTask
 	 */
 	protected String getClasspath()
 	{
-		def wasClasspath = new File("${getWasHome()}/plugins/com.ibm.ws.runtime.jar")
-		if (wasClasspath.exists())
+		def plugins   = new File("${getWasHome()}/plugins")
+		def classpath = ''
+
+		if (plugins.exists())
 		{
-			logger.info('Библиотека {} найдена', 'com.ibm.ws.runtime.jar')
+			def jars = plugins.listFiles(new FileFilter() {
 
-			def cfgClasspath = getProject().getConfigurations().getByName(WASConstants.CONFIGURATION_WAS)?.asPath
-			if (cfgClasspath)
-			{
-				logger.info("Конфигурация 'was' содержит следующие библиотеки - {}", cfgClasspath)
-				return String.format('%s;%s', wasClasspath.path, cfgClasspath)
+				@Override
+				boolean accept(File pathname)
+				{
+					pathname.name.endsWith('.jar')
+				}
+			})
+
+			jars.each { file ->
+				classpath += "${file.path};"
 			}
+		}
 
-			return wasClasspath.path
+		def cfgClasspath = getProject().getConfigurations().getByName(WASConstants.CONFIGURATION_WAS)?.asPath
+		if (cfgClasspath)
+		{
+			classpath += classpath ? "$classpath$cfgClasspath": cfgClasspath
+		}
+
+		if (classpath)
+		{
+			return classpath
 		}
 
 		throw new GradleException('Невозможно вычислить classpath для выполнения задач')

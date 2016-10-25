@@ -1,7 +1,8 @@
-package ru.fudzya.was.task
+package ru.fudzya.was.task.was
 
 import org.gradle.api.tasks.TaskAction
 import ru.fudzya.was.WASConstants
+import ru.fudzya.was.task.WASAdminTask
 
 /**
  * @author fudzya

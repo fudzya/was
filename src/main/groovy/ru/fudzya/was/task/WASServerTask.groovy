@@ -12,6 +12,11 @@ abstract class WASServerTask extends WASTask
 	String server
 
 	/**
+	 * Имя скрипта
+	 */
+	String script
+
+	/**
 	 * Время ожидания
 	 */
 	String timeout
