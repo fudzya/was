@@ -1,51 +1,39 @@
 package ru.fudzya.test
 
-import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Before
 import org.junit.Test
-import ru.fudzya.was.WASConstants
 
 import static org.junit.Assert.*
 
 /**
  * @author fudzya
- * @since 22.10.2016
+ * @since  22.10.2016
  */
-class DefaultDefaultWASServerConfigurationTest
+class DefaultDefaultWASServerConfigurationTest extends WASTest
 {
-	private File testBuildDir
-
 	@Before
 	public void setUp() throws Exception
 	{
-		def buildDir = System.getProperty('testBuildDir')
-		if (buildDir == null)
-		{
-			// TODO delete it
-			testBuildDir = new File('E:\\projects\\was\\src\\test\\wasPluginTest')
-		}
-		else
-		{
-			testBuildDir = new File(buildDir)
-		}
+		configureBuildFile()
 	}
 
 	@Test
-	public void testWASConfigure() throws Exception
+	void testWASStart() throws Exception
 	{
-		try
+		when:
 		{
-			BuildResult buildResult = GradleRunner.create()
-												  .withProjectDir(testBuildDir)
-												  .withArguments(WASConstants.TASK_START_SERVER)
-												  .build()
-
-			println buildResult.output
+			def result = GradleRunner.create()
+									 .withProjectDir(buildDir.root)
+									 .withArguments('wasStartServer', '--info')
+									 .withPluginClasspath(getClassPath())
+									 .withDebug(true)
+									 .build()
 		}
-		catch (Exception e)
+
+		then:
 		{
-			e.printStackTrace()
+			println result.task(':wasStartServer').outcome
 		}
 	}
 }

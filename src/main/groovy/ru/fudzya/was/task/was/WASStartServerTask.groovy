@@ -1,6 +1,5 @@
 package ru.fudzya.was.task.was
 
-import org.gradle.api.tasks.TaskAction
 import ru.fudzya.was.WASConstants
 import ru.fudzya.was.task.WASServerTask
 
@@ -12,8 +11,7 @@ import ru.fudzya.was.task.WASServerTask
  */
 class WASStartServerTask extends WASServerTask
 {
-	@TaskAction
-	void doExecute()
+	protected void doExecute()
 	{
 		getAnt().taskdef(
 			name         : 'startServer',
@@ -23,6 +21,7 @@ class WASStartServerTask extends WASServerTask
 		getAnt().startServer(
 			wasHome      : this.getWasHome(),
 			server       : this.getServer(),
+			profileName  : this.getProfileName(),
 			username     : this.getUsername(),
 			password     : this.getPassword(),
 			script	     : this.getScript(),
@@ -32,6 +31,7 @@ class WASStartServerTask extends WASServerTask
 			trace        : this.isTrace(),
 			logFile      : this.getLogFile(),
 			replaceLog   : this.isReplaceLog(),
+			debug        : true,
 			statusPort   : this.getStatusPort(),
 			failonerror  : this.isFailOnError(),
 			fileEncoding : this.getFileEncoding()

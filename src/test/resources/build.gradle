@@ -1,0 +1,23 @@
+plugins {
+	id 'wasPlugin'
+}
+
+was {
+	user     = 'admin'
+	password = 'admin'
+
+	wasProfile {
+
+		profileName = 'AppSrv01'
+
+		wasServer {
+			serverName = 'SERVER_01'
+
+			wasOptions {
+
+				trace       = true
+				failOnError = true
+			}
+		}
+	}
+}

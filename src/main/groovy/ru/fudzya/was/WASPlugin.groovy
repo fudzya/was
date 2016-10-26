@@ -15,7 +15,7 @@ import ru.fudzya.was.task.WASTask
 
 /**
  * @author fudzya
- * @since 22.10.2016
+ * @since  22.10.2016
  */
 class WASPlugin implements Plugin<Project>
 {
@@ -65,7 +65,7 @@ class WASPlugin implements Plugin<Project>
 						if (file && file.exists())
 						{
 							project.getLogger().info('WebSphere AS установлена в директорию {}', file.path)
-							return wasHome//.replaceAll("\\\\", '/')
+							return wasHome
 						}
 
 						throw new GradleException("Директория $wasHome не существует")

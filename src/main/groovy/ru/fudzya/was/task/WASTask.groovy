@@ -2,6 +2,7 @@ package ru.fudzya.was.task
 
 import org.gradle.api.GradleException
 import org.gradle.api.internal.ConventionTask
+import org.gradle.api.tasks.TaskAction
 import ru.fudzya.was.WASConstants
 
 /**
@@ -45,9 +46,9 @@ abstract class WASTask extends ConventionTask
 	/**
 	 *  Вычисляет classpath для выполняемого таска следующим образом:
 	 *  <br/>
-	 *  1. Ищет в папке с установленным WAS com.ibm.ws.runtime.jar;
+	 *  1. Ищет в папке с установленным WAS папку plugins и записывает в строку путь до каждого jar-файла лежащего в ней;
 	 *  <br/>
-	 *  2. Добавляет к найденному com.ibm.ws.runtime.jar зависимости определенные в конфигурации {@code WASConstants.CONFIGURATION_WAS}
+	 *  2. К получившейся в пункте 1 строке добавляет зависимости определенные в конфигурации {@code WASConstants.CONFIGURATION_WAS}
 	 */
 	protected String getClasspath()
 	{
@@ -83,4 +84,19 @@ abstract class WASTask extends ConventionTask
 
 		throw new GradleException('Невозможно вычислить classpath для выполнения задач')
 	}
+
+	@TaskAction
+	private void exec()
+	{
+		getLogger().info("Настраиваю 'java.home' на использование java поставляемой с WebSphere AS")
+		System.setProperty('java.home', "${this.getWasHome()}\\java")
+
+		getLogger().info("Начинаю исполнение задачи")
+		doExecute()
+	}
+
+	/**
+	 * Каждый таск должен реализовывать данный метод в зависимости от своего назначения
+	 */
+	protected abstract void doExecute()
 }
