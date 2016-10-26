@@ -92,11 +92,35 @@ abstract class WASTask extends ConventionTask
 		System.setProperty('java.home', "${this.getWasHome()}\\java")
 
 		getLogger().info("Начинаю исполнение задачи")
-		doExecute()
+		doExecute(cleanParameters())
 	}
 
 	/**
-	 * Каждый таск должен реализовывать данный метод в зависимости от своего назначения
+	 * @return должен возвращать аргументы передаваемые в метод doExecute
 	 */
-	protected abstract void doExecute()
+	protected Map<String, ?> getArguments() { [:] }
+
+	/**
+	 * Каждый таск должен переопределять данный метод в зависимости от своего назначения
+	 */
+	protected void doExecute(Map<String, ?> arguments = [:])
+	{
+		if (!arguments.wasHome)
+		{
+			throw new IllegalArgumentException('Не задан обязательный параметр wasHome')
+		}
+	}
+
+	private Map<String, ?> cleanParameters()
+	{
+		def parameters = getArguments()
+		if (parameters)
+		{
+			parameters = parameters - parameters.findAll { key, value ->
+				value == null || value == 'null'
+			}
+		}
+
+		parameters
+	}
 }

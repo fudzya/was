@@ -11,14 +11,31 @@ import ru.fudzya.was.task.WASServerTask
  */
 class WASStartServerTask extends WASServerTask
 {
-	protected void doExecute()
+	protected void doExecute(Map<String, ?> arguments = [:])
 	{
+		super.doExecute(arguments)
+
+		if (!arguments.profileName)
+		{
+			throw new IllegalArgumentException('Не задан обязательный параметр profileName')
+		}
+
+		if (!arguments.server)
+		{
+			throw new IllegalArgumentException('Не задан обязательный параметр server')
+		}
+
 		getAnt().taskdef(
 			name         : 'startServer',
 			classname    : WASConstants.CLASS_START_SERVER,
 			classpath    : this.getClasspath())
 
-		getAnt().startServer(
+		getAnt().startServer(arguments)
+	}
+
+	protected Map<String, ?> getArguments()
+	{
+		[
 			wasHome      : this.getWasHome(),
 			server       : this.getServer(),
 			profileName  : this.getProfileName(),
@@ -31,10 +48,10 @@ class WASStartServerTask extends WASServerTask
 			trace        : this.isTrace(),
 			logFile      : this.getLogFile(),
 			replaceLog   : this.isReplaceLog(),
-			debug        : true,
 			statusPort   : this.getStatusPort(),
 			failonerror  : this.isFailOnError(),
-			fileEncoding : this.getFileEncoding()
-		)
+			fileEncoding : this.getFileEncoding(),
+			debug        : true
+		]
 	}
 }
