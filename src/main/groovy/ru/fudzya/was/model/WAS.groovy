@@ -37,12 +37,12 @@ class WAS implements Configurable<WAS>
 	/**
 	 * Имя пользователя
 	 */
-	String user
+	String user = 'admin'
 
 	/**
 	 * Пароль пользователя
 	 */
-	String password
+	String password = 'admin'
 
 	/**
 	 * Хост WAS

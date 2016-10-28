@@ -3,9 +3,6 @@ plugins {
 }
 
 was {
-	user     = 'admin'
-	password = 'admin'
-
 	wasProfile {
 
 		profileName = 'AppSrv01'
@@ -14,9 +11,7 @@ was {
 			serverName = 'SERVER_01'
 
 			wasOptions {
-
-				trace       = true
-				failOnError = true
+				trace = true
 			}
 		}
 	}

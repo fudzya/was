@@ -33,7 +33,7 @@ class WASOptions implements Configurable<WASOptions>
 	/**
 	 * Устанавливает file.encoding для VM
 	 */
-	String fileEncoding
+	String fileEncoding = 'UTF-8'
 
 	/**
 	 * Имя файла логов для логирования информации о запуске сервера
@@ -68,10 +68,15 @@ class WASOptions implements Configurable<WASOptions>
 	/**
 	 * Прервать выполнение задачи при ошибке
 	 */
-	boolean failOnError
+	boolean failOnError = true
 
 	/**
-	 * Скрипт исполняемый при запуске скрипта
+	 * Скрипт исполняемый при запуске сервера
+	 */
+	String script
+
+	/**
+	 * Скрипт исполняемый при запуске сервера
 	 */
 	String startServerScript
 

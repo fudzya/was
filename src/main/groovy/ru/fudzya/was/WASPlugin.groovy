@@ -28,6 +28,7 @@ import ru.fudzya.was.task.was.WASListApplicationsTask
 import ru.fudzya.was.task.WASServerTask
 import ru.fudzya.was.task.was.WASStartServerTask
 import ru.fudzya.was.task.WASTask
+import ru.fudzya.was.task.was.WASStopServerTask
 
 /**
  * @author fudzya
@@ -53,6 +54,7 @@ class WASPlugin implements Plugin<Project>
 	{
 		project.tasks.create(WASConstants.TASK_LIST_APP,     WASListApplicationsTask)
 		project.tasks.create(WASConstants.TASK_START_SERVER, WASStartServerTask)
+		project.tasks.create(WASConstants.TASK_STOP_SERVER,  WASStopServerTask)
 	}
 
 	static def configureTasks(Project project)
@@ -118,7 +120,7 @@ class WASPlugin implements Plugin<Project>
 				})
 
 				task.getConventionMapping().map('script', {
-					options.getStartServerScript()
+					options.getScript()
 				})
 
 				task.getConventionMapping().map('timeout', {
@@ -166,6 +168,13 @@ class WASPlugin implements Plugin<Project>
 
 				task.getConventionMapping().map('connType', {
 					wasSrv.getConnType()
+				})
+			}
+
+			withType(WASStartServerTask) {
+
+				task.getConventionMapping().map('script', {
+					options.getStartServerScript()
 				})
 			}
 		}
