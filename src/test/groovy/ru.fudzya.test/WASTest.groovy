@@ -1,23 +1,18 @@
 package ru.fudzya.test
-
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
-
 /**
  * @author fudzya
- * @since  26.10.2016
+ * @since 26.10.2016
  */
 abstract class WASTest
 {
-	@Rule
-	public TemporaryFolder buildDir = [:]
+	protected File buildDir
+	protected File buildFile
 
-	protected File  buildFile
 	protected final List<File> classpath = []
 
 	protected File configureBuildFile(String testBuildFile)
 	{
-		if (!buildFile)
+		if (buildFile)
 		{
 			def testBuild = getClass().getClassLoader().getResource(testBuildFile)
 			if (!testBuild)
@@ -25,8 +20,7 @@ abstract class WASTest
 				throw new FileNotFoundException("Не найден файл $testBuildFile")
 			}
 
-			buildFile = buildDir.newFile('build.gradle')
-			new File(testBuild.path).withReader { reader ->
+			testBuild.withReader { reader ->
 				reader.eachLine { line ->
 					buildFile << "\n$line"
 				}
@@ -56,15 +50,48 @@ abstract class WASTest
 			}
 		}
 
-		Collections.unmodifiableList(classpath)
+		classpath
 	}
 
-	def cleanBuildFile()
+	void beforeClass()
+	{
+		def seconds = Calendar.getInstance().get(Calendar.SECOND)
+
+		new File("${System.getProperty('java.io.tmpdir')}/testng_$seconds").with { directory ->
+
+			if (directory.exists() || directory.mkdir())
+			{
+				buildDir = directory
+			}
+
+			buildDir
+		}
+
+		new File(buildDir, 'build.gradle').with { file ->
+
+			if (file.exists() || file.createNewFile())
+			{
+				buildFile = file
+			}
+
+			buildFile
+		}
+	}
+
+	void methodDown() throws IOException
 	{
 		if (buildFile)
 		{
 			println 'Очищаю файл сборки для следующей задачи'
 			buildFile.text = ''
+		}
+	}
+
+	void classDown() throws Exception
+	{
+		if (buildDir && buildDir.exists())
+		{
+			buildDir.deleteDir()
 		}
 	}
 }

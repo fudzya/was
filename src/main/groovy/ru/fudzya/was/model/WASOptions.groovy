@@ -33,7 +33,7 @@ class WASOptions implements Configurable<WASOptions>
 	/**
 	 * Устанавливает file.encoding для VM
 	 */
-	String fileEncoding = 'UTF-8'
+	String fileEncoding = 'windows-1251'
 
 	/**
 	 * Имя файла логов для логирования информации о запуске сервера

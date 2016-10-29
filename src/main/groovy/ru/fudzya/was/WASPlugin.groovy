@@ -171,7 +171,7 @@ class WASPlugin implements Plugin<Project>
 				})
 			}
 
-			withType(WASStartServerTask) {
+			withType(WASStartServerTask) { WASStartServerTask task ->
 
 				task.getConventionMapping().map('script', {
 					options.getStartServerScript()

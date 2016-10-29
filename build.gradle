@@ -19,11 +19,11 @@ dependencies {
 	compile     name: 'com.ibm.ws.runtime'
 
 	testCompile gradleTestKit()
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+	testCompile group: 'org.testng', name: 'testng', version: '6.9.10'
 }
 
 test {
-	useJUnit()
+	useTestNG()
 
 	testLogging {
 		showStandardStreams = true

@@ -1,8 +1,10 @@
 package ru.fudzya.test
 
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.After
-import org.junit.Test
+import org.testng.annotations.AfterClass
+import org.testng.annotations.AfterMethod
+import org.testng.annotations.BeforeClass
+import org.testng.annotations.Test
 
 /**
  * @author fudzya
@@ -10,47 +12,43 @@ import org.junit.Test
  */
 class WASServerTasksTest extends WASTest
 {
-	@Test
-	void 'Start WebSphere AS'() throws Exception
+	@BeforeClass
+	void beforeClass() throws Exception
 	{
-		def result
-
-		given:
-		{
-			configureBuildFile('startServer.gradle')
-		}
-
-		when:
-		{
-			result = GradleRunner.create()
-								 .withProjectDir(buildDir.root)
-								 .withArguments('wasStartServer', '--info')
-								 .withPluginClasspath(getClassPath())
-								 .withDebug(true)
-								 .build()
-		}
-
-		then:
-		{
-			assert result.task(':wasStartServer').getOutcome().name() == 'SUCCESS'
-		}
+		super.beforeClass()
 	}
 
 	@Test
+	void 'Start WebSphere AS'() throws Exception
+	{
+		testTaskWithName 'wasStartServer'
+	}
+
+	@Test(dependsOnMethods = 'Start WebSphere AS', alwaysRun = true)
+	void 'WebSphere AS Status'() throws Exception
+	{
+	}
+
+	@Test(dependsOnMethods = 'WebSphere AS Status')
 	void 'Stop WebSphere AS'() throws Exception
+	{
+		testTaskWithName 'wasStopServer'
+	}
+
+	private testTaskWithName(String taskName)
 	{
 		def result
 
 		given:
 		{
-			configureBuildFile('stopServer.gradle')
+			configureBuildFile("${taskName}.gradle")
 		}
 
 		when:
 		{
 			result = GradleRunner.create()
-					.withProjectDir(buildDir.root)
-					.withArguments('wasStopServer', '--info')
+					.withProjectDir(buildDir)
+					.withArguments(taskName, '--info')
 					.withPluginClasspath(getClassPath())
 					.withDebug(true)
 					.build()
@@ -58,13 +56,19 @@ class WASServerTasksTest extends WASTest
 
 		then:
 		{
-			assert result.task(':wasStopServer').getOutcome().name() == 'SUCCESS'
+			assert result.task(":$taskName").getOutcome().name() == 'SUCCESS'
 		}
 	}
 
-	@After
-	public void tearDown() throws Exception
+	@AfterMethod
+	void methodDown() throws Exception
 	{
-		cleanBuildFile()
+		super.methodDown()
+	}
+
+	@AfterClass
+	void classDown() throws Exception
+	{
+		super.classDown()
 	}
 }
