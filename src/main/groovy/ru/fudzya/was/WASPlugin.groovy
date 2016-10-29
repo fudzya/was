@@ -26,6 +26,7 @@ import ru.fudzya.was.model.WASServer
 import ru.fudzya.was.task.WASAdminTask
 import ru.fudzya.was.task.was.WASListApplicationsTask
 import ru.fudzya.was.task.WASServerTask
+import ru.fudzya.was.task.was.WASServerStatusTask
 import ru.fudzya.was.task.was.WASStartServerTask
 import ru.fudzya.was.task.WASTask
 import ru.fudzya.was.task.was.WASStopServerTask
@@ -52,9 +53,10 @@ class WASPlugin implements Plugin<Project>
 
 	static def createTasks(Project project)
 	{
-		project.tasks.create(WASConstants.TASK_LIST_APP,     WASListApplicationsTask)
-		project.tasks.create(WASConstants.TASK_START_SERVER, WASStartServerTask)
-		project.tasks.create(WASConstants.TASK_STOP_SERVER,  WASStopServerTask)
+		project.tasks.create(WASConstants.TASK_LIST_APP,      WASListApplicationsTask)
+		project.tasks.create(WASConstants.TASK_START_SERVER,  WASStartServerTask)
+		project.tasks.create(WASConstants.TASK_STATUS_SERVER, WASServerStatusTask)
+		project.tasks.create(WASConstants.TASK_STOP_SERVER,   WASStopServerTask)
 	}
 
 	static def configureTasks(Project project)
@@ -175,6 +177,21 @@ class WASPlugin implements Plugin<Project>
 
 				task.getConventionMapping().map('script', {
 					options.getStartServerScript()
+				})
+			}
+
+			withType(WASServerStatusTask) { WASServerStatusTask task ->
+
+				task.getConventionMapping().map('cell', {
+					server.getCell()
+				})
+
+				task.getConventionMapping().map('node', {
+					server.getNode()
+				})
+
+				task.getConventionMapping().map('all', {
+					options.isAll()
 				})
 			}
 		}

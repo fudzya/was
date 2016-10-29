@@ -1,0 +1,19 @@
+plugins {
+	id 'wasPlugin'
+}
+
+was {
+	wasProfile {
+
+		profileName = 'AppSrv01'
+
+		wasServer {
+			serverName = 'SERVER_01'
+
+			wasOptions {
+				trace      = true
+				statusPort = '2323'
+			}
+		}
+	}
+}

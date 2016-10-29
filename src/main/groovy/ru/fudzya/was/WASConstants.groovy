@@ -27,9 +27,11 @@ class WASConstants
 
 	static final String TASK_LIST_APP       = 'wasApplications'
 	static final String TASK_START_SERVER   = 'wasStartServer'
+	static final String TASK_STATUS_SERVER  = 'wasServerStatus'
 	static final String TASK_STOP_SERVER    = 'wasStopServer'
 
 	static final String CLASS_START_SERVER  = 'com.ibm.websphere.ant.tasks.StartServer'
+	static final String CLASS_STATUS_SERVER = 'com.ibm.websphere.ant.tasks.ServerStatus'
 	static final String CLASS_STOP_SERVER   = 'com.ibm.websphere.ant.tasks.StopServer'
 	static final String CLASS_LIST_APPS     = 'com.ibm.websphere.ant.tasks.ListApplications'
 

@@ -24,9 +24,10 @@ class WASServerTasksTest extends WASTest
 		testTaskWithName 'wasStartServer'
 	}
 
-	@Test(dependsOnMethods = 'Start WebSphere AS', alwaysRun = true)
+	@Test
 	void 'WebSphere AS Status'() throws Exception
 	{
+		testTaskWithName 'wasServerStatus'
 	}
 
 	@Test(dependsOnMethods = 'WebSphere AS Status')

@@ -81,6 +81,11 @@ class WASOptions implements Configurable<WASOptions>
 	String startServerScript
 
 	/**
+	 * Распечатать статус всех серверов
+	 */
+	boolean all
+
+	/**
 	 * @param closure замыкание для настройки опций
 	 * @return настроенный текущий экземпляр
 	 */

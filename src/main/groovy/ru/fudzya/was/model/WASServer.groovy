@@ -33,6 +33,16 @@ class WASServer implements Configurable<WASServer>
 	String serverName
 
 	/**
+	 * Ячейка (CELL)
+	 */
+	String cell
+
+	/**
+	 * Узел (NODE)
+ 	 */
+	String node
+
+	/**
 	 * @param closure
 	 */
 	void wasOptions(Closure closure)
