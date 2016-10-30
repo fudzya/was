@@ -34,11 +34,6 @@ class WASStopServerTask extends WASServerTask
 			throw new IllegalArgumentException('Не задан обязательный параметр profileName')
 		}
 
-		if (!arguments.server)
-		{
-			throw new IllegalArgumentException('Не задан обязательный параметр server')
-		}
-
 		getAnt().taskdef(
 			name         : 'stopServer',
 			classname    : WASConstants.CLASS_STOP_SERVER,

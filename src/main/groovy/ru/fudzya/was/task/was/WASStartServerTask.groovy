@@ -36,11 +36,6 @@ class WASStartServerTask extends WASServerTask
 			throw new IllegalArgumentException('Не задан обязательный параметр profileName')
 		}
 
-		if (!arguments.server)
-		{
-			throw new IllegalArgumentException('Не задан обязательный параметр server')
-		}
-
 		getAnt().taskdef(
 			name         : 'startServer',
 			classname    : WASConstants.CLASS_START_SERVER,

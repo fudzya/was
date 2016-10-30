@@ -45,17 +45,12 @@ class WASServerStatusTask extends WASServerTask
 	{
 		super.doExecute(arguments)
 
-		if (!arguments.server)
-		{
-			throw new IllegalArgumentException('Не задан обязательный параметр server')
-		}
-
 		getAnt().taskdef(
 			name         : 'serverStatus',
 			classname    : WASConstants.CLASS_STATUS_SERVER,
 			classpath    : this.getClasspath())
 
-		getAnt().serverStatus(arguments)
+		this.getAnt().serverStatus(arguments)
 	}
 
 	@Override

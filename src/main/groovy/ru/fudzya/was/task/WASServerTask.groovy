@@ -66,4 +66,15 @@ abstract class WASServerTask extends WASTask
 	 * Включить или выключить трассировку
 	 */
 	boolean trace
+
+	@Override
+	protected void doExecute(Map<String, ?> arguments = [:])
+	{
+		super.doExecute(arguments)
+
+		if (!arguments.server)
+		{
+			throw new IllegalArgumentException('Не задан обязательный параметр server')
+		}
+	}
 }
