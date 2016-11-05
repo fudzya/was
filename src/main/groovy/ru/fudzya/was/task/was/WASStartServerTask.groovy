@@ -17,6 +17,7 @@
 package ru.fudzya.was.task.was
 
 import ru.fudzya.was.WASConstants
+import ru.fudzya.was.help.Crunches
 import ru.fudzya.was.task.WASServerTask
 
 /**
@@ -36,12 +37,15 @@ class WASStartServerTask extends WASServerTask
 			throw new IllegalArgumentException('Не задан обязательный параметр profileName')
 		}
 
-		getAnt().taskdef(
-			name         : 'startServer',
-			classname    : WASConstants.CLASS_START_SERVER,
-			classpath    : this.getClasspath())
+		Crunches.withOSCrunches(getWasHome()) {
 
-		getAnt().startServer(arguments)
+			getAnt().taskdef(
+				name      : 'startServer',
+				classname : WASConstants.CLASS_START_SERVER,
+				classpath : this.getClasspath())
+
+			getAnt().startServer(arguments)
+		}
 	}
 
 	protected Map<String, ?> getArguments()
