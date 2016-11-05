@@ -24,13 +24,13 @@ class WASServerTasksTest extends WASTest
 		testTaskWithName 'wasStartServer'
 	}
 
-	@Test
+	@Test(enabled = false)
 	void 'WebSphere AS Status'() throws Exception
 	{
 		testTaskWithName 'wasServerStatus'
 	}
 
-	@Test(dependsOnMethods = 'WebSphere AS Status')
+	@Test(dependsOnMethods = 'Start WebSphere AS')
 	void 'Stop WebSphere AS'() throws Exception
 	{
 		testTaskWithName 'wasStopServer'
